@@ -1,0 +1,9 @@
+{
+  "engine": "postgresql",
+  "server": "127.0.0.1",
+  "port": "5432",
+  "user": "contable",
+  "password": "contable",
+  "database": "accounting",
+  "sslmode": "disable"
+}

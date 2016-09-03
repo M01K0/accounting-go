@@ -9,4 +9,6 @@ type AccountPeriod struct {
 	Month     int8      `json:"month"`
 	Open      bool      `json:"isOpen"`
 	CloseDate time.Time `json:"closeDate"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
 }

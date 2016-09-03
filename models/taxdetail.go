@@ -1,12 +1,16 @@
 package models
 
+import "time"
+
 // TaxDetail Detalle del impuesto.
 type TaxDetail struct {
-	ID         int16   `json:"id"`
-	TaxID      int16   `json:"idImpuesto"`
-	Detail     string  `json:"detalle"`
+	ID         int16 `json:"id"`
+	Tax        `json:"tax"`
+	Detail     string  `json:"detail"`
 	Percentage float32 `json:"porcentaje"`
-	AccountID  int16   `json:"idCuenta"`
-	Nature     string  `json:"naturaleza"`
-	BaseValue  float32 `json:"valorBase"`
+	AccountPUC `json:"accountPUC"`
+	Nature     string    `json:"nature"`
+	BaseValue  float32   `json:"baseValue"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
 }

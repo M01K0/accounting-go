@@ -1,21 +1,26 @@
 package models
 
+import "time"
+
 // Company Datos generales de la empresa
 type Company struct {
-	IdentificationType `json:"tipoIdentificacion"`
-	Identification     string `json:"numeroIdentificacion"`
-	VerificationDigit  string `json:"digitoVerificacion"`
-	Name               string `json:"nombre"`
-	Address            string `json:"direccion"`
-	PhoneNumber        string `json:"telefono"`
-	Departament        `json:"departamento"`
-	City               `json:"ciudad"`
-	WebSite            string `json:"sitioWeb"`
-	Email              string `json:"correo"`
-	Activity           string `json:"actividad"`
-	AutoRetainer       bool   `json:"autorretenedor"`
-	PersonType         `json:"tipoPersona"`
-	RegimeType         `json:"tipoRegimen"`
+	ID int16 `json:"id"`
+	IdentificationType `json:"identificationType"`
+	IdentificationNumber     string `json:"identificationNumber"`
+	VerificationDigit  string `json:"verificationDigit"`
+	Company               string `json:"company"`
+	Address            string `json:"address"`
+	Phone        string `json:"phone"`
+	Department        `json:"department"`
+	City               `json:"city"`
+	Web            string `json:"web"`
+	Email              string `json:"email"`
+	Activity           string `json:"activity"`
+	AutoRretenedor       bool   `json:"autorretenedor"`
+	PersonType         `json:"personType"`
+	RegimeType         `json:"regimeType"`
+	TaxpayerType       `json:"taxpayerType"`
 	Logo               string `json:"logo"`
-	TaxpayerType       `json:"tipoContribuyente"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt`
 }

@@ -5,14 +5,15 @@ import "time"
 // AccountingHeader Encabezado de movimiento contable
 type AccountingHeader struct {
 	ID                 int `json:"id"`
-	AccountingDocument `json:"documento"`
-	Consecutive        int       `json:"consecutivo"`
-	MovementDate       time.Time `json:"fechaMovimiento"`
-	Comment            string    `json:"comentario"`
-	AccountPeriod      `json:"periodo"`
-	UserCreate         User      `json:"usuario"`
-	CreatedAt          time.Time `json:"fechaCreacion"`
-	UserUpdate         User      `json:"usuarioActualizacion"`
-	UpdatedAt          time.Time `json:"fechaActualizacion"`
-	Anulled            bool      `json:"anulado"`
+	AccountingDocument `json:"accountingDocument"`
+	Consecutive        int       `json:"consecutive"`
+	MovementDate       time.Time `json:"movementDate"`
+	Commentary         string    `json:"commentary"`
+	AccountPeriod      `json:"accountPeriod"`
+	UserCreater        User               `json:"userCreater"`
+	UserUpdater        User               `json:"userUpdater"`
+	Anulled            bool               `json:"anulled"`
+	CreatedAt          time.Time          `json:"createdAt"`
+	UpdatedAt          time.Time          `json:"updatedAt"`
+	Details            []AccountingDetail `json:"details"`
 }
