@@ -14,7 +14,10 @@ func main() {
 		fmt.Println("Error al insertar perfil", err)
 		profile = models.Profile{}
 	}
-	profile.ID = 27
+	fmt.Println(profile)
+
+
+	/*profile.ID = 27
 	err = execute.DeleteProfile(&profile)
 	if err != nil {
 		fmt.Println("Error al eliminar el perfil", err)
@@ -37,5 +40,5 @@ func main() {
 	}
 	for _, p := range profiles {
 		fmt.Println(p)
-	}
+	}*/
 }

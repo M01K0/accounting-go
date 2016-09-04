@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	profiledao interfaces.ProfileDAO
+	profileDAO interfaces.ProfileDAO
 	once       sync.Once
 )
 
@@ -24,7 +24,7 @@ func initDAO() {
 	log.Println("Se ha llamado initDAO")
 	switch configuration.Config.Engine {
 	case "postgresql":
-		profiledao = postgresql.ProfileDAOPsql{}
+		profileDAO = postgresql.ProfileDAOPsql{}
 	default:
 		log.Fatal("No existe el motor de persistencia solicitado")
 	}
