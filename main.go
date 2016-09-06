@@ -3,18 +3,20 @@ package main
 import (
 	"fmt"
 
-	"github.com/alexyslozada/accounting-go/models"
-	"github.com/alexyslozada/accounting-go/dao/execute"
+	"github.com/alexyslozada/accounting-go/dao/executedao"
 )
 
 func main() {
-	profile := models.Profile{Name: "Desde DAO"}
+	/*profile := models.Profile{Name: "Desde DAO"}
 	err := execute.InsertProfile(&profile)
 	if err != nil {
 		fmt.Println("Error al insertar perfil", err)
 		profile = models.Profile{}
 	}
 	fmt.Println(profile)
+	*/
+	object, _ := executedao.ObjectDAO.GetObjectByID("centrocosto")
+	fmt.Println(object)
 
 
 	/*profile.ID = 27

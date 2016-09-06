@@ -3,7 +3,6 @@ package postgresql
 import (
 	"errors"
 	"github.com/alexyslozada/accounting-go/models"
-	"database/sql"
 )
 
 type ProfileDAOPsql struct{}
@@ -21,10 +20,7 @@ func (dao ProfileDAOPsql) InsertProfile(profile *models.Profile) error {
 	defer stmt.Close()
 
 	err = stmt.QueryRow(profile.Name).Scan(&profile.ID, &profile.Name, &profile.Active)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 // UpdateProfile Actualiza el registro en la BD
@@ -41,10 +37,7 @@ func (dao ProfileDAOPsql) UpdateProfile(profile *models.Profile) error {
 	defer stmt.Close()
 
 	err = stmt.QueryRow(profile.Name, profile.Active, profile.ID).Scan(&profile.ID, &profile.Name, &profile.Active)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 // DeleteProfile Borra un registro de la BD
@@ -64,7 +57,7 @@ func (dao ProfileDAOPsql) DeleteProfile(profile *models.Profile) error {
 	if err != nil {
 		return err
 	}
-	if rowsaffected, _ := result.RowsAffected(); rowsaffected == 0 {
+	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
 		return errors.New("No se eliminó ningún registro")
 	}
 	return nil
@@ -85,13 +78,6 @@ func (dao ProfileDAOPsql) GetProfileByID(id int16) (*models.Profile, error) {
 	defer stmt.Close()
 
 	err = stmt.QueryRow(id).Scan(&profile.ID, &profile.Name, &profile.Active)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, errors.New("No se encontraron registros")
-		}
-		return nil, err
-	}
-
 	return profile, nil
 }
 

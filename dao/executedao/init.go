@@ -1,4 +1,4 @@
-package execute
+package executedao
 
 import (
 	"github.com/alexyslozada/accounting-go/dao/configuration"
@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	profileDAO interfaces.ProfileDAO
+	ObjectDAO interfaces.ObjectDAO
+	ProfileDAO interfaces.ProfileDAO
 	once       sync.Once
 )
 
@@ -24,7 +25,8 @@ func initDAO() {
 	log.Println("Se ha llamado initDAO")
 	switch configuration.Config.Engine {
 	case "postgresql":
-		profileDAO = postgresql.ProfileDAOPsql{}
+		ObjectDAO = postgresql.ObjectDAOPsql{}
+		ProfileDAO = postgresql.ProfileDAOPsql{}
 	default:
 		log.Fatal("No existe el motor de persistencia solicitado")
 	}
