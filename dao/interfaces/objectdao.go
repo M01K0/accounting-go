@@ -2,10 +2,11 @@ package interfaces
 
 import "github.com/alexyslozada/accounting-go/models"
 
+// ObjectDAO Interface para el dao de Objeto
 type ObjectDAO interface {
-	InsertObject(o *models.Object) error
-	UpdateObject(o *models.Object) error
-	DeleteObject(o *models.Object) error
-	GetObjectByID(c string) (*models.Object, error)
-	GetAllObject() ([]models.Object, error)
+	Insert(o *models.Object) error
+	Update(o *models.Object) error
+	Delete(o *models.Object) error
+	GetByID(id int) (*models.Object, error)
+	GetAll() ([]models.Object, error)
 }

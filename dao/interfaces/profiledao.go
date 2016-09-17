@@ -4,9 +4,9 @@ import "github.com/alexyslozada/accounting-go/models"
 
 // ProfileDAO Interface para el dao del perfil
 type ProfileDAO interface {
-	InsertProfile(p *models.Profile) error
-	UpdateProfile(p *models.Profile) error
-	DeleteProfile(p *models.Profile) error
-	GetProfileByID(id int16) (*models.Profile, error)
-	GetAllProfiles() ([]models.Profile, error)
+	Insert(p *models.Profile) error
+	Update(p *models.Profile) error
+	Delete(p *models.Profile) error
+	GetByID(id int16) (*models.Profile, error)
+	GetAll() ([]models.Profile, error)
 }

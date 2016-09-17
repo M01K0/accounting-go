@@ -3,44 +3,26 @@ package main
 import (
 	"fmt"
 
-	"github.com/alexyslozada/accounting-go/dao/executedao"
+	dao "github.com/alexyslozada/accounting-go/dao/executedao"
+	"log"
+	"encoding/json"
 )
 
 func main() {
-	/*profile := models.Profile{Name: "Desde DAO"}
-	err := execute.InsertProfile(&profile)
-	if err != nil {
-		fmt.Println("Error al insertar perfil", err)
-		profile = models.Profile{}
-	}
-	fmt.Println(profile)
-	*/
-	object, _ := executedao.ObjectDAO.GetObjectByID("centrocosto")
-	fmt.Println(object)
+	p, err := dao.ProfileDAO.GetByID(1)
+	checkErr(err)
 
+	p.ObjectsProfile, err = dao.ObjectProfileDAO.GetByProfileID(p.ID)
+	checkErr(err)
 
-	/*profile.ID = 27
-	err = execute.DeleteProfile(&profile)
-	if err != nil {
-		fmt.Println("Error al eliminar el perfil", err)
+	myJson, err := json.Marshal(p)
+	checkErr(err)
+
+	fmt.Println(string(myJson))
+}
+
+func checkErr(e error) {
+	if e != nil {
+		log.Println(e)
 	}
-	fmt.Println(profile)
-	otherProfile, err := execute.GetProfileByID(12)
-	if err != nil {
-		fmt.Println("Error al consultar perfil", err)
-	}
-	fmt.Println(otherProfile)
-	otherProfile.Name = "CoNtaBle"
-	err = execute.UpdateProfile(otherProfile)
-	if err != nil {
-		fmt.Println("Error al actualizar perfil", err)
-	}
-	fmt.Println(otherProfile)
-	profiles, err := execute.GetAllProfiles()
-	if err != nil {
-		fmt.Println("Error al listar los perfiles", err)
-	}
-	for _, p := range profiles {
-		fmt.Println(p)
-	}*/
 }

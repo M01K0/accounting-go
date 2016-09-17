@@ -4,6 +4,6 @@
   "port": "5432",
   "user": "contable",
   "password": "contable",
-  "database": "contabilidad",
+  "database": "accounting",
   "sslmode": "disable"
 }

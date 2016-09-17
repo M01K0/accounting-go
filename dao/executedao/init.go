@@ -10,6 +10,7 @@ import (
 
 var (
 	ObjectDAO interfaces.ObjectDAO
+	ObjectProfileDAO interfaces.ObjectProfileDAO
 	ProfileDAO interfaces.ProfileDAO
 	once       sync.Once
 )
@@ -26,6 +27,7 @@ func initDAO() {
 	switch configuration.Config.Engine {
 	case "postgresql":
 		ObjectDAO = postgresql.ObjectDAOPsql{}
+		ObjectProfileDAO = postgresql.ObjectProfileDAOPsql{}
 		ProfileDAO = postgresql.ProfileDAOPsql{}
 	default:
 		log.Fatal("No existe el motor de persistencia solicitado")

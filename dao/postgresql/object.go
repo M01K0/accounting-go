@@ -3,13 +3,15 @@ package postgresql
 import (
 	"github.com/alexyslozada/accounting-go/models"
 	"errors"
+	"database/sql"
 )
 
+// ObjectDAOPsql estructura dao de object
 type ObjectDAOPsql struct {}
 
-// InsertObject insertar
-func (o ObjectDAOPsql) InsertObject(object *models.Object) error {
-	query := "INSERT INTO objetos (obj_codigo, obj_nombre, obj_descripcion) VALUES (upper($1), upper($2), $3) RETURNING obj_codigo, obj_nombre, obj_descripcion"
+// Insert insertar
+func (dao ObjectDAOPsql) Insert(object *models.Object) error {
+	query := "INSERT INTO objects (code, object_name, description) VALUES (upper($1), upper($2), $3) RETURNING id, code, object_name, description, created_at, updated_at"
 	db := get()
 	defer db.Close()
 
@@ -18,14 +20,13 @@ func (o ObjectDAOPsql) InsertObject(object *models.Object) error {
 		return err
 	}
 	defer stmt.Close()
-
-	err = stmt.QueryRow(object.Code, object.Name, object.Description).Scan(&object.Code, &object.Name, &object.Description)
-	return err
+	row := stmt.QueryRow(object.Code, object.ObjectName, object.Description)
+	return dao.rowToObject(row, object)
 }
 
-// UpdateObject actualizar
-func (o ObjectDAOPsql) UpdateObject(object *models.Object) error {
-	query := "UPDATE objetos SET obj_codigo = upper($1), obj_nombre = upper($2), obj_descripcion = $3 WHERE obj_codigo = upper($1) RETURNING obj_codigo, obj_nombre, obj_descripcion"
+// Update actualizar
+func (dao ObjectDAOPsql) Update(object *models.Object) error {
+	query := "UPDATE objects SET code = upper($1), object_name = upper($2), description = upper($3), updated_at = now() WHERE id = $4 RETURNING id, code, object_name, description, created_at, updated_at"
 	db := get()
 	defer db.Close()
 
@@ -35,13 +36,14 @@ func (o ObjectDAOPsql) UpdateObject(object *models.Object) error {
 	}
 	defer stmt.Close()
 
-	err = stmt.QueryRow(object.Code, object.Name, object.Description).Scan(&object.Code, &object.Name, &object.Description)
-	return err
+	row := stmt.QueryRow(object.Code, object.ObjectName, object.Description, object.ID)
+	return dao.rowToObject(row, object)
+
 }
 
-// DeleteObject borrar
-func (o ObjectDAOPsql) DeleteObject(object *models.Object) error {
-	query := "DELETE FROM objetos WHERE obj_codigo = upper($1)"
+// Delete borrar
+func (dao ObjectDAOPsql) Delete(object *models.Object) error {
+	query := "DELETE FROM objects WHERE id = $1"
 	db := get()
 	defer db.Close()
 
@@ -51,19 +53,20 @@ func (o ObjectDAOPsql) DeleteObject(object *models.Object) error {
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(object.Code)
+	result, err := stmt.Exec(object.ID)
 	if err != nil {
 		return err
 	}
 	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
 		return errors.New("No se eliminó ningún registro")
 	}
+	object = new(models.Object)
 	return nil
 }
 
-// GetObjectByID Consulta por id
-func (o ObjectDAOPsql) GetObjectByID(code string) (*models.Object, error) {
-	query := "SELECT obj_codigo, obj_nombre, obj_descripcion FROM objetos WHERE obj_codigo = upper($1)"
+// GetByID Consulta por id
+func (dao ObjectDAOPsql) GetByID(id int) (*models.Object, error) {
+	query := "SELECT id, code, object_name, description, created_at, updated_at FROM objects WHERE id = $1"
 	object := &models.Object{}
 	db := get()
 	defer db.Close()
@@ -74,13 +77,14 @@ func (o ObjectDAOPsql) GetObjectByID(code string) (*models.Object, error) {
 	}
 	defer stmt.Close()
 
-	err = stmt.QueryRow(code).Scan(&object.Code, &object.Name, &object.Description)
+	row := stmt.QueryRow(id)
+	err = dao.rowToObject(row, object)
 	return object, err
 }
 
-// GetAllObject Consulta todos
-func (o ObjectDAOPsql) GetAllObject() ([]models.Object, error) {
-	query := "SELECT obj_codigo, obj_nombre, obj_descripcion FROM objetos"
+// GetAll Consulta todos
+func (dao ObjectDAOPsql) GetAll() ([]models.Object, error) {
+	query := "SELECT id, code, object_name, description, created_at, updated_at FROM objects ORDER BY code"
 	objects := make([]models.Object, 0)
 	db := get()
 	defer db.Close()
@@ -99,11 +103,16 @@ func (o ObjectDAOPsql) GetAllObject() ([]models.Object, error) {
 
 	for rows.Next() {
 		var object models.Object
-		err = rows.Scan(&object.Code, &object.Name, &object.Description)
+		err = rows.Scan(&object.ID, &object.Code, &object.ObjectName, &object.Description, &object.CreatedAt, &object.UpdatedAt)
 		if err != nil {
 			return objects, err
 		}
 		objects = append(objects, object)
 	}
 	return objects, nil
+}
+
+// rowToObject mapea la consulta al objeto
+func (dao ObjectDAOPsql) rowToObject(row *sql.Row, object *models.Object) error {
+	return row.Scan(&object.ID, &object.Code, &object.ObjectName, &object.Description, &object.CreatedAt, &object.UpdatedAt)
 }
