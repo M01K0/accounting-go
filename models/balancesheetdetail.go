@@ -5,7 +5,7 @@ type BalanceSheetDetail struct {
 	ID                   int   `json:"id"`
 	BalanceSheetHeaderID int16 `json:"idEncabezado"`
 	Account              `json:"cuenta"`
-	ThirdParties         `json:"tercero"`
+	ThirdParty           `json:"tercero"`
 	CostCenter           `json:"centroCosto"`
 	PreviousBalance      float32 `json:"saldoAnterior"`
 	Debit                float32 `json:"debito"`

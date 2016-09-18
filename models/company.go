@@ -8,7 +8,7 @@ type Company struct {
 	Name               string `json:"nombre"`
 	Address            string `json:"direccion"`
 	PhoneNumber        string `json:"telefono"`
-	Departament        `json:"departamento"`
+	Department        `json:"departamento"`
 	City               `json:"ciudad"`
 	WebSite            string `json:"sitioWeb"`
 	Email              string `json:"correo"`

@@ -7,6 +7,6 @@ type AccountingDetail struct {
 	Account            `json:"cuentaPuc"`
 	Debit              float32 `json:"debito"`
 	Credit             float32 `json:"credito"`
-	ThirdParties       `json:"tercero"`
+	ThirdParty         `json:"tercero"`
 	CostCenter         `json:"centroCosto"`
 }
