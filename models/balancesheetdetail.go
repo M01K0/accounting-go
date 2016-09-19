@@ -4,7 +4,7 @@ package models
 type BalanceSheetDetail struct {
 	ID                   int   `json:"id"`
 	BalanceSheetHeaderID int16 `json:"idEncabezado"`
-	Account              `json:"cuenta"`
+	AccountPUC           `json:"cuenta"`
 	ThirdParty           `json:"tercero"`
 	CostCenter           `json:"centroCosto"`
 	PreviousBalance      float32 `json:"saldoAnterior"`
