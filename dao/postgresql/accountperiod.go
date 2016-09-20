@@ -10,7 +10,7 @@ type AccountPeriodDAOPsql struct {}
 
 // Insert insertar registro en la BD
 func (dao AccountPeriodDAOPsql) Insert(obj *models.AccountPeriod) error {
-	query := "INSERT INTO account_period (year, month) VALUES ($1, $2) RETURNING id, year, month, open, close_date, created_at, updated_at"
+	query := "INSERT INTO account_periods (year, month) VALUES ($1, $2) RETURNING id, year, month, open, close_date, created_at, updated_at"
 	db := get()
 	defer db.Close()
 
@@ -26,7 +26,7 @@ func (dao AccountPeriodDAOPsql) Insert(obj *models.AccountPeriod) error {
 
 // Update actualizar registro en la bd
 func (dao AccountPeriodDAOPsql) Update(obj *models.AccountPeriod) error {
-	query := "UPDATE account_period SET year = $2, month = $3, open = $4, close_date = $5, updated_at = now() WHERE id = $1 RETURNING id, year, month, open, close_date, created_at, updated_at"
+	query := "UPDATE account_periods SET year = $2, month = $3, open = $4, close_date = $5, updated_at = now() WHERE id = $1 RETURNING id, year, month, open, close_date, created_at, updated_at"
 	db := get()
 	defer db.Close()
 
@@ -42,7 +42,7 @@ func (dao AccountPeriodDAOPsql) Update(obj *models.AccountPeriod) error {
 
 // Delete borrar registro de la bd
 func (dao AccountPeriodDAOPsql) Delete(obj *models.AccountPeriod) error {
-	query := "DELETE FROM account_period WHERE id = $1"
+	query := "DELETE FROM account_periods WHERE id = $1"
 	db := get()
 	defer db.Close()
 
@@ -65,7 +65,7 @@ func (dao AccountPeriodDAOPsql) Delete(obj *models.AccountPeriod) error {
 
 // GetByID consultar registro por id
 func (dao AccountPeriodDAOPsql) GetByID(id int) (*models.AccountPeriod, error) {
-	query := "SELECT id, year, month, open, close_date, created_at, updated_at FROM account_period WHERE id = $1"
+	query := "SELECT id, year, month, open, close_date, created_at, updated_at FROM account_periods WHERE id = $1"
 	obj := &models.AccountPeriod{}
 	db := get()
 	defer db.Close()
@@ -83,7 +83,7 @@ func (dao AccountPeriodDAOPsql) GetByID(id int) (*models.AccountPeriod, error) {
 
 // GetAll Consulta todos los registros de la bd
 func (dao AccountPeriodDAOPsql) GetAll() ([]models.AccountPeriod, error) {
-	query := "SELECT id, year, month, open, close_date, created_at, updated_at FROM AccountPeriod ORDER BY id"
+	query := "SELECT id, year, month, open, close_date, created_at, updated_at FROM account_periods ORDER BY id"
 	objs := make([]models.AccountPeriod, 0)
 	db := get()
 	defer db.Close()

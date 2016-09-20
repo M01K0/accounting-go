@@ -10,7 +10,7 @@ type AccountingDocumentDAOPsql struct {}
 
 // Insert insertar registro en la BD
 func (dao AccountingDocumentDAOPsql) Insert(obj *models.AccountingDocument) error {
-	query := "INSERT INTO accounting_document (abbreviation, document_name) VALUES (upper($1), upper($2)) RETURNING id, abbreviation, document_name, consecutive, created_at, updated_at"
+	query := "INSERT INTO accounting_documents (abbreviation, document_name) VALUES (upper($1), upper($2)) RETURNING id, abbreviation, document_name, consecutive, created_at, updated_at"
 	db := get()
 	defer db.Close()
 
@@ -26,7 +26,7 @@ func (dao AccountingDocumentDAOPsql) Insert(obj *models.AccountingDocument) erro
 
 // Update actualizar registro en la bd
 func (dao AccountingDocumentDAOPsql) Update(obj *models.AccountingDocument) error {
-	query := "UPDATE accounting_document SET abbreviation = upper($2), document_name = upper($3), updated_at = now() WHERE id = $1 RETURNING id, abbreviation, document_name, consecutive, created_at, updated_at"
+	query := "UPDATE accounting_documents SET abbreviation = upper($2), document_name = upper($3), updated_at = now() WHERE id = $1 RETURNING id, abbreviation, document_name, consecutive, created_at, updated_at"
 	db := get()
 	defer db.Close()
 
@@ -42,7 +42,7 @@ func (dao AccountingDocumentDAOPsql) Update(obj *models.AccountingDocument) erro
 
 // Delete borrar registro de la bd
 func (dao AccountingDocumentDAOPsql) Delete(obj *models.AccountingDocument) error {
-	query := "DELETE FROM accounting_document WHERE id = $1"
+	query := "DELETE FROM accounting_documents WHERE id = $1"
 	db := get()
 	defer db.Close()
 
@@ -65,7 +65,7 @@ func (dao AccountingDocumentDAOPsql) Delete(obj *models.AccountingDocument) erro
 
 // GetByID consultar registro por id
 func (dao AccountingDocumentDAOPsql) GetByID(id int) (*models.AccountingDocument, error) {
-	query := "SELECT id, abbreviation, document_name, consecutive, created_at, updated_at FROM accounting_document WHERE id = $1"
+	query := "SELECT id, abbreviation, document_name, consecutive, created_at, updated_at FROM accounting_documents WHERE id = $1"
 	obj := &models.AccountingDocument{}
 	db := get()
 	defer db.Close()
@@ -83,7 +83,7 @@ func (dao AccountingDocumentDAOPsql) GetByID(id int) (*models.AccountingDocument
 
 // GetAll Consulta todos los registros de la bd
 func (dao AccountingDocumentDAOPsql) GetAll() ([]models.AccountingDocument, error) {
-	query := "SELECT id, abbreviation, document_name, consecutive, created_at, updated_at FROM accounting_document ORDER BY id"
+	query := "SELECT id, abbreviation, document_name, consecutive, created_at, updated_at FROM accounting_documents ORDER BY id"
 	objs := make([]models.AccountingDocument, 0)
 	db := get()
 	defer db.Close()

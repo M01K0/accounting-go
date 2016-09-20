@@ -10,10 +10,14 @@ import (
 
 var (
 	AccountClassDAO       interfaces.AccountClassDAO
+	AccountingDetailDAO   interfaces.AccountingDetailDAO
 	AccountingDocumentDAO interfaces.AccountingDocumentDAO
+	AccountingHeaderDAO   interfaces.AccountingHeaderDAO
 	AccountLevelDAO       interfaces.AccountLevelDAO
 	AccountPeriodDAO      interfaces.AccountPeriodDAO
 	AccountPUCDAO         interfaces.AccountPUCDAO
+	BalanceSheetDetailDAO interfaces.BalanceSheetDetailDAO
+	BalanceSheetHeaderDAO interfaces.BalanceSheetHeaderDAO
 	CityDAO               interfaces.CityDAO
 	CompanyDAO            interfaces.CompanyDAO
 	CostCenterDAO         interfaces.CostCenterDAO
@@ -28,6 +32,7 @@ var (
 	RegimeTypeDAO         interfaces.RegimeTypeDAO
 	ReportTypeDAO         interfaces.ReportTypeDAO
 	TaxDAO                interfaces.TaxDAO
+	TaxDetailDAO          interfaces.TaxDetailDAO
 	TaxpayerTypeDAO       interfaces.TaxpayerTypeDAO
 	ThirdPartyDAO         interfaces.ThirdPartyDAO
 	UserDAO               interfaces.UserDAO
@@ -46,10 +51,14 @@ func initDAO() {
 	switch configuration.Config.Engine {
 	case "postgresql":
 		AccountClassDAO = postgresql.AccountClassDAOPsql{}
+		AccountingDetailDAO = postgresql.AccountingDetailDAOPsql{}
 		AccountingDocumentDAO = postgresql.AccountingDocumentDAOPsql{}
+		AccountingHeaderDAO = postgresql.AccountingHeaderDAOPsql{}
 		AccountLevelDAO = postgresql.AccountLevelDAOPsql{}
 		AccountPeriodDAO = postgresql.AccountPeriodDAOPsql{}
 		AccountPUCDAO = postgresql.AccountPUCDAOPsql{}
+		BalanceSheetDetailDAO = postgresql.BalanceSheetDetailDAOPsql{}
+		BalanceSheetHeaderDAO = postgresql.BalanceSheetHeaderDAOPsql{}
 		CityDAO = postgresql.CityDAOPsql{}
 		CompanyDAO = postgresql.CompanyDAOPsql{}
 		CostCenterDAO = postgresql.CostCenterDAOPsql{}
@@ -64,6 +73,7 @@ func initDAO() {
 		RegimeTypeDAO = postgresql.RegimeTypeDAOPsql{}
 		ReportTypeDAO = postgresql.ReportTypeDAOPsql{}
 		TaxDAO = postgresql.TaxDAOPsql{}
+		TaxDetailDAO = postgresql.TaxDetailDAOPsql{}
 		TaxpayerTypeDAO = postgresql.TaxpayerTypeDAOPsql{}
 		ThirdPartyDAO = postgresql.ThirdPartyDAOPsql{}
 		UserDAO = postgresql.UserDAOPsql{}
