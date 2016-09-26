@@ -36,11 +36,12 @@ func getConfigurationFile() {
 	// La ruta del archivo debe ser una carpeta
 	// al mismo nivel del ejecutable principal (main)
 	file, err := os.Open("./config/connection.json")
-  defer file.Close()
+	defer file.Close()
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&Config)
 	if err != nil {

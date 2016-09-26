@@ -25,6 +25,7 @@ var (
 	FunctionaryCompanyDAO interfaces.FunctionaryCompanyDAO
 	FunctionaryTypeDAO    interfaces.FunctionaryTypeDAO
 	IdentificationTypeDAO interfaces.IdentificationTypeDAO
+	LoginDAO              interfaces.LoginDAO
 	ObjectDAO             interfaces.ObjectDAO
 	ObjectProfileDAO      interfaces.ObjectProfileDAO
 	PersonTypeDAO         interfaces.PersonTypeDAO
@@ -66,6 +67,7 @@ func initDAO() {
 		FunctionaryCompanyDAO = postgresql.FunctionaryCompanyDAOPsql{}
 		FunctionaryTypeDAO = postgresql.FunctionaryTypeDAOPsql{}
 		IdentificationTypeDAO = postgresql.IdentificationTypeDAOPsql{}
+		LoginDAO = postgresql.LoginDAOPsql{}
 		ObjectDAO = postgresql.ObjectDAOPsql{}
 		ObjectProfileDAO = postgresql.ObjectProfileDAOPsql{}
 		PersonTypeDAO = postgresql.PersonTypeDAOPsql{}

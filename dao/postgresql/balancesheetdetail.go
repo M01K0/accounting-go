@@ -1,12 +1,11 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
-	"errors"
 	"database/sql"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
-type BalanceSheetDetailDAOPsql struct {}
+type BalanceSheetDetailDAOPsql struct{}
 
 // Insert insertar registro en la BD
 func (dao BalanceSheetDetailDAOPsql) Insert(obj *models.BalanceSheetDetail) error {

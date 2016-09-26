@@ -1,24 +1,31 @@
 package main
 
 import (
-	"fmt"
-
-	dao "github.com/alexyslozada/accounting-go/dao/executedao"
 	"log"
-	"encoding/json"
+	"github.com/urfave/negroni"
+	"github.com/alexyslozada/accounting-go/common"
+	"github.com/alexyslozada/accounting-go/routers"
+	"net/http"
 )
 
 func main() {
-	p, err := dao.ProfileDAO.GetByID(1)
-	checkErr(err)
+	// Inicia la lógica
+	common.StartUp()
 
-	p.ObjectsProfile, err = dao.ObjectProfileDAO.GetByProfileID(p.ID)
-	checkErr(err)
+	// Inicia los router
+	router := routers.InitRoutes()
 
-	myJson, err := json.Marshal(p)
-	checkErr(err)
+	// Inicia los middlewares
+	n := negroni.Classic()
+	n.UseHandler(router)
 
-	fmt.Println(string(myJson))
+	// Inicia el servidor
+	server := &http.Server{
+		Addr: ":8080",
+		Handler: n,
+	}
+	log.Println("Iniciado...")
+	server.ListenAndServe()
 }
 
 func checkErr(e error) {
