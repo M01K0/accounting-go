@@ -6,6 +6,9 @@ type (
 	AuthUserResource struct {
 		Data models.AuthUser `json:"data"`
 	}
+	CostCenterResource struct {
+		Data models.CostCenter `json:"data"`
+	}
 	LoginResource struct {
 		Data models.Login `json:"data"`
 	}

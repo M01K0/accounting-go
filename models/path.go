@@ -2,11 +2,10 @@ package models
 
 import "time"
 
-// Object es la estructura de los objetos de seguridad
-type Object struct {
+type Path struct {
 	ID          int       `json:"id"`
-	Code        string    `json:"code"`
-	ObjectName  string    `json:"objectName"`
+	Path        string    `json:"path"`
+	PathName    string    `json:"pathName"`
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
