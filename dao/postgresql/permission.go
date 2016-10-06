@@ -2,41 +2,58 @@ package postgresql
 
 import (
 	"github.com/alexyslozada/accounting-go/models"
-	"bytes"
 )
 
 // PermissionDAOPsql consulta si el perfil tiene o no permisos
 type PermissionDAOPsql struct {}
 
-func (dao PermissionDAOPsql) IsPermitted(profile models.Profile, path string, method string) (bool, error) {
-	var action, query string
-	var result bool
+func (dao PermissionDAOPsql) GetScopes(id int16) ([]models.Scope, error) {
+	query := `
+		SELECT paths.path, post, put, del, get
+		FROM path_profile INNER JOIN paths ON path_profile.id = paths.id
+		WHERE path_profile.profile_id = $1 AND (post = true OR put = true OR del = true OR get = true)
+		ORDER BY paths.path
+	`
 
-	bufferQuery := bytes.NewBufferString("SELECT ")
-	switch method {
-	case "GET":
-		action = "get"
-	case "POST":
-		action = "post"
-	case "PUT":
-		action = "put"
-	case "DELETE":
-		action = "del"
-	}
-	bufferQuery.WriteString(action)
-	bufferQuery.WriteString(" FROM path_profile WHERE profile_id = $1 AND path_id = (SELECT id FROM paths WHERE path = $2)")
-
-	query = bufferQuery.String()
-
+	scopes := make([]models.Scope, 0)
 	db := get()
 	defer db.Close()
 
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		return false, err
+		return scopes, err
 	}
 	defer stmt.Close()
 
-	err = stmt.QueryRow(profile.ID, path).Scan(&result)
-	return result, err
+	rows, err := stmt.Query(id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var path string
+	var post, put, del, get bool
+	for rows.Next() {
+		var scope models.Scope
+		err = rows.Scan(&path, &post, &put, &del, &get)
+		if err != nil {
+			return scopes, err
+		}
+
+		scope.Path = path
+		if post {
+			scope.Methods = append(scope.Methods, "POST")
+		}
+		if put {
+			scope.Methods = append(scope.Methods, "PUT")
+		}
+		if del {
+			scope.Methods = append(scope.Methods, "DELETE")
+		}
+		if get {
+			scope.Methods = append(scope.Methods, "GET")
+		}
+		scopes = append(scopes, scope)
+	}
+	return scopes, nil
 }

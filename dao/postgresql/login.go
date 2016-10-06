@@ -5,7 +5,7 @@ import "github.com/alexyslozada/accounting-go/models"
 type LoginDAOPsql struct {}
 
 func (l LoginDAOPsql) Login(u *models.User) error {
-	query := `SELECT users.id, identification, username, profile_id, profile
+	query := `SELECT users.id, identification, username, users.active, profile_id, profile, profiles.active
 				FROM users INNER JOIN profiles ON users.profile_id = profiles.id
 				WHERE email = $1 AND passwd = md5($2) AND users.active = true AND profiles.active = true`
 	db := get()
@@ -18,5 +18,5 @@ func (l LoginDAOPsql) Login(u *models.User) error {
 	defer stmt.Close()
 
 	row := stmt.QueryRow(u.Email, u.Passwd)
-	return row.Scan(&u.ID, &u.Identification, &u.Username, &u.Profile.ID, &u.Profile.Profile)
+	return row.Scan(&u.ID, &u.Identification, &u.Username, &u.Active, &u.Profile.ID, &u.Profile.Profile, &u.Profile.Active)
 }

@@ -3,7 +3,7 @@ package common
 import (
 	"crypto/rsa"
 	"github.com/alexyslozada/accounting-go/models"
-	"github.com/dgrijalva/jwt-go"
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"github.com/gorilla/context"
 	"io/ioutil"
@@ -12,13 +12,8 @@ import (
 	"time"
 	"strings"
 	"errors"
+	"github.com/alexyslozada/accounting-go/dao/executedao"
 )
-
-// AppClaims provee una estructura personalizada para JWT claims
-type AppClaims struct {
-	User models.User `json:"user"`
-	jwt.StandardClaims
-}
 
 // Archivos para firmar y verificar los token
 // openssl genrsa -out app.rsa 1024
@@ -59,10 +54,16 @@ func initKeys() {
 
 // GenerateJWT genera un nuevo JWT token
 func GenerateJWT(user models.User) (string, error) {
-	// Create de Claims
-	claims := AppClaims{
-		user,
-		jwt.StandardClaims{
+	scopes, err := executedao.PermissionDAO.GetScopes(user.Profile.ID)
+	if err != nil {
+		return "", nil
+	}
+
+
+	claims := models.AppClaims{
+		User: user,
+		Scopes: scopes,
+		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 8).Unix(),
 			Issuer:    "Contabilidad por Alexys",
 		},
@@ -81,7 +82,7 @@ func GenerateJWT(user models.User) (string, error) {
 func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	// Get token from request
 	// El extractor podría ser: request.AuthorizationHeaderExtractor o tal vez el personalizado TokenFromAuthHeader
-	token, err := request.ParseFromRequestWithClaims(r, request.OAuth2Extractor, &AppClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := request.ParseFromRequestWithClaims(r, request.OAuth2Extractor, &models.AppClaims{}, func(token *jwt.Token) (interface{}, error) {
 		// Como solo tenemos una llave pública, la devolvemos
 		return verifyKey, nil
 	})
@@ -104,7 +105,8 @@ func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 	}
 
 	if token.Valid {
-		context.Set(r, "user", token.Claims.(*AppClaims).User)
+		context.Set(r, "user", token.Claims.(*models.AppClaims).User)
+		context.Set(r, "scopes", token.Claims.(*models.AppClaims).Scopes)
 		next(w, r)
 	} else {
 		DisplayError(w, err, "Token de acceso inválido.", 401)
