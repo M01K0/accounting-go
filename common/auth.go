@@ -56,7 +56,7 @@ func initKeys() {
 func GenerateJWT(user models.User) (string, error) {
 	scopes, err := executedao.PermissionDAO.GetScopes(user.Profile.ID)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 

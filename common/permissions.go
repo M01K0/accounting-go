@@ -2,7 +2,6 @@ package common
 
 import (
 	"errors"
-	"github.com/alexyslozada/accounting-go/models"
 	"github.com/gorilla/context"
 	"net/http"
 )
@@ -20,19 +19,16 @@ func MakeMiddleWarePermissions(path string, fn func(http.ResponseWriter, *http.R
 			return
 		}
 
-		scopes, ok := s.([]models.Scope)
+		scopes, ok := s.(map[string][]string)
 		method := r.Method
 		var result bool
 
-		for _, p := range scopes {
-			if p.Path == path {
-				for _, m := range p.Methods {
-					if m == method {
-						result = true
-						break
-					}
+		if methods, ok := scopes[path]; ok {
+			for _, m := range methods {
+				if m == method {
+					result = true
+					break
 				}
-				break
 			}
 		}
 

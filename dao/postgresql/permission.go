@@ -1,13 +1,9 @@
 package postgresql
 
-import (
-	"github.com/alexyslozada/accounting-go/models"
-)
-
 // PermissionDAOPsql consulta si el perfil tiene o no permisos
 type PermissionDAOPsql struct {}
 
-func (dao PermissionDAOPsql) GetScopes(id int16) ([]models.Scope, error) {
+func (dao PermissionDAOPsql) GetScopes(id int16) (map[string][]string, error) {
 	query := `
 		SELECT paths.path, post, put, del, get
 		FROM path_profile INNER JOIN paths ON path_profile.id = paths.id
@@ -15,13 +11,13 @@ func (dao PermissionDAOPsql) GetScopes(id int16) ([]models.Scope, error) {
 		ORDER BY paths.path
 	`
 
-	scopes := make([]models.Scope, 0)
+	scopes := make(map[string][]string)
 	db := get()
 	defer db.Close()
 
 	stmt, err := db.Prepare(query)
 	if err != nil {
-		return scopes, err
+		return nil, err
 	}
 	defer stmt.Close()
 
@@ -34,26 +30,25 @@ func (dao PermissionDAOPsql) GetScopes(id int16) ([]models.Scope, error) {
 	var path string
 	var post, put, del, get bool
 	for rows.Next() {
-		var scope models.Scope
+		methods := make([]string, 0)
 		err = rows.Scan(&path, &post, &put, &del, &get)
 		if err != nil {
 			return scopes, err
 		}
 
-		scope.Path = path
 		if post {
-			scope.Methods = append(scope.Methods, "POST")
+			methods = append(methods, "POST")
 		}
 		if put {
-			scope.Methods = append(scope.Methods, "PUT")
+			methods = append(methods, "PUT")
 		}
 		if del {
-			scope.Methods = append(scope.Methods, "DELETE")
+			methods = append(methods, "DELETE")
 		}
 		if get {
-			scope.Methods = append(scope.Methods, "GET")
+			methods = append(methods, "GET")
 		}
-		scopes = append(scopes, scope)
+		scopes[path] = methods
 	}
 	return scopes, nil
 }
