@@ -8,7 +8,7 @@ import (
 )
 
 func SetCostCenterRoutes(router *mux.Router) {
-	prefix := "/cost-centers"
+	prefix := "/api/cost-centers"
 	ccr := mux.NewRouter().PathPrefix(prefix).Subrouter().StrictSlash(true)
 	ccr.HandleFunc("/", controllers.CostCenterCreate).Methods("POST")
 

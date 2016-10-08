@@ -23,7 +23,8 @@ func MakeMiddleWarePermissions(path string, fn func(http.ResponseWriter, *http.R
 		method := r.Method
 		var result bool
 
-		if methods, ok := scopes[path]; ok {
+		// Se busca en el map la ruta sin el /api
+		if methods, ok := scopes[path[4:]]; ok {
 			for _, m := range methods {
 				if m == method {
 					result = true
