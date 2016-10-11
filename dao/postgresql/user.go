@@ -10,7 +10,7 @@ type UserDAOPsql struct{}
 
 // Insert insertar registro en la BD
 func (dao UserDAOPsql) Insert(obj *models.User) error {
-	query := "INSERT INTO users (identification, username, email, passwd, profile_id) VALUES ($1, upper($2), $3, md5($4), $5) RETURNING id, identification, username, email, passwd, profile_id, active, created_at, updated_at"
+	query := "INSERT INTO users (identification, username, email, passwd, profile_id) VALUES ($1, upper($2), $3, $4, $5) RETURNING id, identification, username, email, passwd, profile_id, active, created_at, updated_at"
 	db := get()
 	defer db.Close()
 

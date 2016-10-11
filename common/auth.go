@@ -53,8 +53,8 @@ func initKeys() {
 }
 
 // GenerateJWT genera un nuevo JWT token
-func GenerateJWT(user models.User) (string, error) {
-	scopes, err := executedao.PermissionDAO.GetScopes(user.Profile.ID)
+func GenerateJWT(user models.User, method string) (string, error) {
+	scopes, err := executedao.PermissionDAO.GetScopes(user.Profile.ID, method)
 	if err != nil {
 		return "", err
 	}
@@ -62,13 +62,14 @@ func GenerateJWT(user models.User) (string, error) {
 
 	claims := models.AppClaims{
 		User: user,
+		Method: method,
 		Scopes: scopes,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 8).Unix(),
 			Issuer:    "Contabilidad por Alexys",
 		},
 	}
-	log.Printf("Creando un token a: %s\n", user.Username)
+	log.Printf("Creando un token a: %s, para el método: %s\n", user.Username, method)
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	log.Println("Firmando el token...")
 	ss, err := token.SignedString(signKey)
@@ -92,7 +93,7 @@ func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 			vErr := err.(*jwt.ValidationError)
 			switch vErr.Errors {
 			case jwt.ValidationErrorExpired:
-				DisplayError(w, err, "Su token ha expirado, por favor vuelva a ingresar", 401)
+				DisplayError(w, err, "Su token ha expirado, por favor vuelva a ingresar", http.StatusProxyAuthRequired)
 				return
 			default:
 				DisplayError(w, err, "Error en el token de acceso.", 500)
@@ -106,10 +107,11 @@ func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	if token.Valid {
 		context.Set(r, "user", token.Claims.(*models.AppClaims).User)
+		context.Set(r, "methodrequest", token.Claims.(*models.AppClaims).Method)
 		context.Set(r, "scopes", token.Claims.(*models.AppClaims).Scopes)
 		next(w, r)
 	} else {
-		DisplayError(w, err, "Token de acceso inválido.", 401)
+		DisplayError(w, err, "Token de acceso inválido.", http.StatusProxyAuthRequired)
 	}
 }
 

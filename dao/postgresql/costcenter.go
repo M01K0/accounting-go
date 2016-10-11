@@ -41,7 +41,7 @@ func (dao CostCenterDAOPsql) Update(obj *models.CostCenter) error {
 }
 
 // Delete borrar registro de la bd
-func (dao CostCenterDAOPsql) Delete(obj *models.CostCenter) error {
+func (dao CostCenterDAOPsql) Delete(id int16) error {
 	query := "DELETE FROM cost_centers WHERE id = $1"
 	db := get()
 	defer db.Close()
@@ -52,19 +52,18 @@ func (dao CostCenterDAOPsql) Delete(obj *models.CostCenter) error {
 	}
 	defer stmt.Close()
 
-	result, err := stmt.Exec(obj.ID)
+	result, err := stmt.Exec(id)
 	if err != nil {
 		return err
 	}
 	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
 		return errors.New("No se eliminó ningún registro")
 	}
-	obj = new(models.CostCenter)
 	return nil
 }
 
 // GetByID consultar registro por id
-func (dao CostCenterDAOPsql) GetByID(id int) (*models.CostCenter, error) {
+func (dao CostCenterDAOPsql) GetByID(id int16) (*models.CostCenter, error) {
 	query := "SELECT id, code, cost_center, created_at, updated_at FROM cost_centers WHERE id = $1"
 	obj := &models.CostCenter{}
 	db := get()

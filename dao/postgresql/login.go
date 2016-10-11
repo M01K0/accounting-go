@@ -7,7 +7,7 @@ type LoginDAOPsql struct {}
 func (l LoginDAOPsql) Login(u *models.User) error {
 	query := `SELECT users.id, identification, username, users.active, profile_id, profile, profiles.active
 				FROM users INNER JOIN profiles ON users.profile_id = profiles.id
-				WHERE email = $1 AND passwd = md5($2) AND users.active = true AND profiles.active = true`
+				WHERE email = $1 AND passwd = $2 AND users.active = true AND profiles.active = true`
 	db := get()
 	defer db.Close()
 

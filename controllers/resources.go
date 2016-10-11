@@ -9,6 +9,9 @@ type (
 	CostCenterResource struct {
 		Data models.CostCenter `json:"data"`
 	}
+	CostCentersResource struct {
+		Data []models.CostCenter `json:"data"`
+	}
 	LoginResource struct {
 		Data models.Login `json:"data"`
 	}

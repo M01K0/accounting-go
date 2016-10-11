@@ -7,6 +7,7 @@ import (
 // AppClaims provee una estructura personalizada para JWT claims
 type AppClaims struct {
 	User User `json:"user"`
-	Scopes map[string][]string `json:"scopes"`
+	Method string `json:"method"`
+	Scopes []string `json:"scopes"`
 	jwt.StandardClaims
 }

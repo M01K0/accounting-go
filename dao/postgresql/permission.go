@@ -1,17 +1,22 @@
 package postgresql
 
+import (
+	"fmt"
+	"strings"
+)
+
 // PermissionDAOPsql consulta si el perfil tiene o no permisos
 type PermissionDAOPsql struct {}
 
-func (dao PermissionDAOPsql) GetScopes(id int16) (map[string][]string, error) {
-	query := `
-		SELECT paths.path, post, put, del, get
+func (dao PermissionDAOPsql) GetScopes(id int16, method string) ([]string, error) {
+	query := fmt.Sprintf(`
+		SELECT paths.path
 		FROM path_profile INNER JOIN paths ON path_profile.id = paths.id
-		WHERE path_profile.profile_id = $1 AND (post = true OR put = true OR del = true OR get = true)
+		WHERE path_profile.profile_id = $1 AND %s = true
 		ORDER BY paths.path
-	`
+	`, strings.ToLower(method))
 
-	scopes := make(map[string][]string)
+	scopes := make([]string, 0)
 	db := get()
 	defer db.Close()
 
@@ -27,28 +32,14 @@ func (dao PermissionDAOPsql) GetScopes(id int16) (map[string][]string, error) {
 	}
 	defer rows.Close()
 
-	var path string
-	var post, put, del, get bool
 	for rows.Next() {
-		methods := make([]string, 0)
-		err = rows.Scan(&path, &post, &put, &del, &get)
+		var path string
+		err = rows.Scan(&path)
 		if err != nil {
 			return scopes, err
 		}
 
-		if post {
-			methods = append(methods, "POST")
-		}
-		if put {
-			methods = append(methods, "PUT")
-		}
-		if del {
-			methods = append(methods, "DELETE")
-		}
-		if get {
-			methods = append(methods, "GET")
-		}
-		scopes[path] = methods
+		scopes = append(scopes, path)
 	}
 	return scopes, nil
 }
