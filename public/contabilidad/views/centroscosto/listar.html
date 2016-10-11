@@ -1,0 +1,74 @@
+<div class="vista">
+  <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+  <a href="#/centros-costo/crear" class="boton">Nuevo</a>
+  <table class="tabla">
+    <caption>Centros de Costo</caption>
+    <colgroup>
+      <col class="col-30">
+      <col>
+      <col class="col-20">
+    </colgroup>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Código</th>
+      <th>Centro</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody id="cuerpoTabla"></tbody>
+  </table>
+  <div class="contenedor">
+    <div class="item">
+      <div class="paginacion">
+        <label for="page">Página</label>
+        <input type="number" id="page" name="page" value="1" min="1" class="paginacion__numero"/>
+        <label id="totalPages"></label>
+        <label for="limit">Reg x Pag</label>
+        <input type="number" id="limit" name="limit" value="10" min="1" class="paginacion__numero"/>
+        <label for="orderBy">Ordenado x</label>
+        <select id="orderBy" name="orderBy" class="paginacion__select">
+          <option value="2">Codigo</option>
+          <option value="3">Nombre</option>
+        </select>
+        <label for="orderType">Tipo</label>
+        <select id="orderType" name="orderType" class="paginacion__select">
+          <option value="asc">Ascendente</option>
+          <option value="desc">Descendente</option>
+        </select>
+        <button id="btnListar" class="paginacion__boton"
+                onclick="_.getCtrl().paginate();">Listar
+        </button>
+        <ul class="paginacion__paginas">
+          <li>
+            <button class="paginacion__navegacion" id="first" title="Primero"
+                    onclick="_.getCtrl().movePaginate('first');">&laquo;</button>
+          </li>
+          <li>
+            <button class="paginacion__navegacion" id="previus" title="Anterior"
+                    onclick="_.getCtrl().movePaginate('previus');">&lt;</button>
+          </li>
+          <li>
+            <button class="paginacion__navegacion" id="next" title="Siguiente"
+                    onclick="_.getCtrl().movePaginate('next');">&gt;</button>
+          </li>
+          <li>
+            <button class="paginacion__navegacion" id="last" title="Último"
+                    onclick="_.getCtrl().movePaginate('last');">&raquo;</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <template id="plantilla">
+    <tr class="fila">
+      <td class="id"></td>
+      <td class="codigo"></td>
+      <td class="nombre"></td>
+      <td class="acciones">
+        <button class="eliminar accion">Eliminar</button>
+        <button class="actualizar accion">Actualizar</button>
+      </td>
+    </tr>
+  </template>
+</div>

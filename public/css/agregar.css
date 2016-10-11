@@ -1,0 +1,28 @@
+textarea{
+    display: block;
+    font-family: 'Roboto';
+    padding: 1em;
+    text-transform: uppercase;
+    width: 100%;
+}
+.boton_eliminar{
+    margin: 0;
+    padding: .5em .5em;
+}
+.texto-derecha{
+    text-align: right;
+}
+#registros_detalle{
+    font-family: 'Open Sans', sans-serif;
+}
+#registros_detalle > div > div > div:nth-child(even){
+    font-size: .8em;
+    font-weight: 300;
+}
+.inf-cuenta {
+    font-weight: bold;
+    background-color: #ccc !important;
+}
+.total-cuenta {
+    font-weight: bold;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+        <link rel="stylesheet" href="../css/estilos.css"/>
+        <link rel="stylesheet" href="../css/agregar.css"/>
+        <title>ContabilidAPP</title>
+        <script src="../js/init/autenticado.js"></script>
+    </head>
+    <body class="fondo-gris">
+        <div class="contenedor total">
+            <div class="item no-padding">
+                <div id="menu-principal">Menu</div>
+                <nav class="navegacion-ppal">
+                    <ul id="menu-ppal" class="menu-ppal">
+                        <li class="menu-ppal__item">
+                            <a href="#/usuarios-cambiar-clave" class="menu-ppal__link">Cambiar Contraseña</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="SCerrarSesion" class="menu-ppal__link">Cerrar Sesion</a>
+                        </li>
+                        <li class="menu-ppal__item--separador"></li>
+                        <li class="menu-ppal__item">
+                            <a href="#/perfiles" class="menu-ppal__link">Perfiles</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/usuarios" class="menu-ppal__link">Usuarios</a>
+                        </li>
+                        <li class="menu-ppal__item--separador"></li>
+                        <li class="menu-ppal__item">
+                            <a href="#/tipo-identificacion" class="menu-ppal__link">Tipo Identificación</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/tipo-funcionario" class="menu-ppal__link">Tipo Funcionario</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/empresa" class="menu-ppal__link">Empresa</a>
+                        </li>
+                        <li class="menu-ppal__item--separador"></li>
+                        <li class="menu-ppal__item">
+                            <a href="#/cuentas-puc" class="menu-ppal__link">PUC - Cuentas</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/centros-costo" class="menu-ppal__link">Centros de Costo</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/terceros" class="menu-ppal__link">Terceros</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/documento-contable" class="menu-ppal__link">Documentos Contables</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/periodos/crear" class="menu-ppal__link">Periodos Contables</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/contabilidad/registro" class="menu-ppal__link">Registro Contable</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/informes/detallados/movimientos/cuentas" class="menu-ppal__link">Informes Detallados</a>
+                        </li>
+                        <li class="menu-ppal__item">
+                            <a href="#/informes/balance/general" class="menu-ppal__link">Informes Generales</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="item">
+                <div id="user"></div>
+            </div>
+        </div>
+        <div class="contenedor">
+            <div class="item">
+                <div id="mensaje-inicial"></div>
+            </div>
+        </div>
+        <div class="contenedor">
+            <div class="item">
+                <div id="vista"></div>
+            </div>
+        </div>
+        <script src="../js/init/libreria.js"></script>
+        <script src="../js/init/init.js"></script>
+        <script src="../js/init/core-min.js"></script>
+        <script src="../js/init/x64-core-min.js"></script>
+        <script src="../js/init/sha3-min.js"></script>
+        <script src="../js/init/menu-ppal.js"></script>
+        <script src="../js/init/route.js"></script>
+        <script src="../js/ctrl/costcenter.js"></script>
+        <script src="../js/ctrl/perfiles.js"></script>
+        <script src="../js/ctrl/objetosxperfil.js"></script>
+        <script src="../js/ctrl/usuarios.js"></script>
+        <script src="../js/ctrl/tiposidentificacion.js"></script>
+        <script src="../js/ctrl/tiposfuncionario.js"></script>
+        <script src="../js/ctrl/empresa.js"></script>
+        <script src="../js/ctrl/departamentos.js"></script>
+        <script src="../js/ctrl/ciudades.js"></script>
+        <script src="../js/ctrl/tipopersona.js"></script>
+        <script src="../js/ctrl/tiporegimen.js"></script>
+        <script src="../js/ctrl/empresa_funcionarios.js"></script>
+        <script src="../js/ctrl/cuentaspuc.js"></script>
+        <script src="../js/ctrl/terceros.js"></script>
+        <script src="../js/ctrl/documentocontable.js"></script>
+        <script src="../js/ctrl/periodos.js"></script>
+        <script src="../js/ctrl/registrocontable.js"></script>
+        <script src="../js/ctrl/cierre_contable.js"></script>
+        <script src="../js/ctrl/informes/movimiento-cuenta.js"></script>
+        <script src="../js/ctrl/informes/balance-general.js"></script>
+    </body>
+</html>
