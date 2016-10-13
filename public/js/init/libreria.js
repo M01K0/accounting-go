@@ -1,17 +1,17 @@
 'use strict';
 (function (window, document) {
-    function inicio() {
-        var marco = null,
+    function init() {
+        let marco = null,
             vistaNoEncontrado = null,
             rutas = {},
             controladores = {},
             ctrl = null,
             singleton = {},
             libreria = {
-                MSG_CORRECTO: 2,
-                MSG_ERROR: 1,
-                MSG_ADVERTENCIA: 3,
-                MSG_NO_AUTENTICADO: 4,
+                STATUS_OK: 200,
+                STATUS_UNAUTHORIZED: 401,
+                STATUS_FORBIDDEN: 403,
+                STATUS_INTERNALSERVERERROR: 500,
                 getID: function (id) {
                     var clone = {elemento: document.getElementById(id)};
                     clone = this.extender(clone, this);
@@ -25,16 +25,8 @@
                 get: function () {
                     return this.elemento;
                 },
-                addClass: function (clase) {
-                    this.elemento.classList.add(clase);
-                    return this;
-                },
                 click: function (funcion) {
                     this.elemento.addEventListener('click', funcion, false);
-                    return this;
-                },
-                delClass: function (clase) {
-                    this.elemento.classList.remove(clase);
                     return this;
                 },
                 noSubmit: function () {
@@ -43,23 +35,31 @@
                     }, false);
                     return this;
                 },
-                innerHTML: function (contenido) {
-                    this.elemento.innerHTML = contenido;
+                addClass: function (clase) {
+                    this.elemento.classList.add(clase);
                     return this;
                 },
-                setValue: function (valor) {
-                    this.elemento.value = valor;
-                    return this;
-                },
-                text: function (contenido) {
-                    this.elemento.textContent = contenido;
+                delClass: function (clase) {
+                    this.elemento.classList.remove(clase);
                     return this;
                 },
                 toggleClass: function (clase) {
                     this.elemento.classList.toggle(clase);
                     return this;
                 },
-                value: function () {
+                innerHTML: function (contenido) {
+                    this.elemento.innerHTML = contenido;
+                    return this;
+                },
+                text: function (contenido) {
+                    this.elemento.textContent = contenido;
+                    return this;
+                },
+                setValue: function (valor) {
+                    this.elemento.value = valor;
+                    return this;
+                },
+                getValue: function () {
                     return this.elemento.value;
                 },
                 getSingleton: function () {
@@ -68,7 +68,7 @@
                 setSingleton: function (objeto) {
                     singleton = objeto;
                 },
-                onEnterSiguiente: function(){
+                onEnterNext: function(){
                     this.elemento.addEventListener('keypress', function(e){
                         var indice = parseInt(e.target.getAttribute('tabindex'),10),
                             siguiente;
@@ -252,8 +252,8 @@
                         this.getID(select).get().appendChild(fragmento);
                     }
                 },
-                controlador: function (nombre, controller) {
-                    controladores[nombre] = {'controlador': controller};
+                setCtrl: function (name, controller) {
+                    controladores[name] = {'controlador': controller};
                 },
                 getCtrl: function () {
                     if (arguments.length === 0) {
@@ -310,7 +310,7 @@
                         console.log(error);
                     });
                 },
-                noEncontrado: function (archivo) {
+                notFound: function (archivo) {
                     vistaNoEncontrado = archivo;
                     return this;
                 },
@@ -342,6 +342,12 @@
                                 status: this.status,
                                 content: this.responseText
                             };
+                            // Unauthorized status
+                            if (this.status === _.STATUS_UNAUTHORIZED) {
+                                alert('No estás autenticado. Por favor ingresa nuevamente.');
+                                window.location.href = '/';
+                                return;
+                            }
                             resolver(response);
                         }, false);
                         xhr.addEventListener('error', function () {
@@ -351,9 +357,12 @@
                     });
                 },
                 /* Es un FACADE del ajax */
-                ejecutar: function (obj) {
-                    this.ajax({method: obj.method, url: obj.url, body: obj.body})
-                            .then(function (response) {
+                execute: function (obj) {
+                    this.ajax({
+                        method: obj.method,
+                        url: obj.url,
+                        body: obj.body
+                    }).then(function (response) {
                                 obj.callback(response);
                             }, function (error) {
                                 console.log(error);
@@ -378,6 +387,66 @@
                         }
                     }
                     return out;
+                },
+                serializeJSON: function (form) {
+                	if (!form || form.nodeName !== "FORM") {
+                		return;
+                	}
+
+                	let i = 0, j = 0, obj = {}, name = '', value;
+
+                	for (i = form.elements.length - 1; i >= 0; i = i - 1) {
+                		if (form.elements[i].name === "") {
+                			continue;
+                		}
+                		name = form.elements[i].name;
+                		value = form.elements[i].value;
+
+                		switch (form.elements[i].nodeName) {
+                		case 'INPUT':
+                			switch (form.elements[i].type) {
+                			case 'checkbox':
+                			    if (form.elements[i].checked) {
+                			        obj[name] = true;
+                			    } else {
+                			        obj[name] = false;
+                			    }
+                			    break;
+                			case 'radio':
+                				if (form.elements[i].checked) {
+                					obj[name] = value;
+                				}
+                				break;
+                			case 'file':
+                				break;
+                			default:
+                				obj[name] = value;
+                				break;
+                			}
+                			break;
+                		case 'TEXTAREA':
+                			obj[name] = value;
+                			break;
+                		case 'SELECT':
+                			switch (form.elements[i].type) {
+                			case 'select-one':
+                				obj[name] = value;
+                				break;
+                			case 'select-multiple':
+                			    let myOptions = [];
+                				for (j = form.elements[i].options.length - 1; j >= 0; j = j - 1) {
+                					if (form.elements[i].options[j].selected) {
+                						myOptions.push(encodeURIComponent(form.elements[i].options[j].value));
+                					}
+                				}
+                				obj[name] = myOptions;
+                				break;
+                			}
+                			break;
+                		}
+                	}
+                	// return q.join("&");
+                	return obj;
                 }
             };
 
@@ -404,13 +473,14 @@
             }
             return si + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "") + sf;
         };
+
         return libreria;
-    }
-    ;
+    };
 
     if (typeof window.libreria === "undefined") {
-        window.libreria = window._ = inicio();
+        window.libreria = window._ = init();
     } else {
         console.log("Ya está llamada");
     }
+
 })(window, document);

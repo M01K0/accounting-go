@@ -93,14 +93,14 @@ func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 			vErr := err.(*jwt.ValidationError)
 			switch vErr.Errors {
 			case jwt.ValidationErrorExpired:
-				DisplayError(w, err, "Su token ha expirado, por favor vuelva a ingresar", http.StatusProxyAuthRequired)
+				DisplayError(w, err, "Su token ha expirado, por favor vuelva a ingresar", http.StatusUnauthorized)
 				return
 			default:
-				DisplayError(w, err, "Error en el token de acceso.", 500)
+				DisplayError(w, err, "Error en el token de acceso.", http.StatusUnauthorized)
 				return
 			}
 		default:
-			DisplayError(w, err, "Error al procesar el token.", 500)
+			DisplayError(w, err, "Error al procesar el token.", http.StatusUnauthorized)
 			return
 		}
 	}
@@ -111,7 +111,7 @@ func Authorize(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 		context.Set(r, "scopes", token.Claims.(*models.AppClaims).Scopes)
 		next(w, r)
 	} else {
-		DisplayError(w, err, "Token de acceso inválido.", http.StatusProxyAuthRequired)
+		DisplayError(w, err, "Token de acceso inválido.", http.StatusUnauthorized)
 	}
 }
 

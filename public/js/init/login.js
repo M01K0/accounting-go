@@ -29,8 +29,8 @@
     e.preventDefault();
     let data = {
         data: {
-          "email": _.getID('email').value(),
-          "password": CryptoJS.SHA3(_.getID('password').value()).toString()
+          "email": _.getID('email').getValue(),
+          "password": CryptoJS.SHA3(_.getID('password').getValue()).toString()
         }
     };
 

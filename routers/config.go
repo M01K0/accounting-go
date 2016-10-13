@@ -7,6 +7,7 @@ func InitRoutes() *mux.Router {
 
 	// Archivos estáticos
 	SetPublicRoutes(router)
+	SetFaviconRoute(router)
 	// Usuarios
 	SetLoginRoutes(router)
 	// Centros de Costo

@@ -8,21 +8,21 @@
                     <input type="number" id="id" name="id" readonly />
                 </div>
                 <div class="item tablet-50">
-                    <label for="codigo" class="label-titulo">Código</label>
-                    <input id="codigo" name="codigo" required type="text" maxlength="3" placeholder="codigo" autocomplete="off" autofocus>
+                    <label for="code" class="label-titulo">Código</label>
+                    <input id="code" name="code" required type="text" maxlength="3" placeholder="codigo" autocomplete="off" autofocus>
                 </div>
                 <div class="item tablet-50">
-                    <label for="nombre" class="label-titulo">Nombre</label>
-                    <input id="nombre" name="nombre" required type="text" maxlength="30" placeholder="nombre" autocomplete="off">
+                    <label for="costCenter" class="label-titulo">Nombre</label>
+                    <input id="costCenter" name="costCenter" required type="text" maxlength="30" placeholder="nombre" autocomplete="off">
                 </div>
                 <div class="item">
                     <button id="btnActualizar"
                             class="boton primario"
-                            onclick="_.getCtrl().actualizar();">Actualizar</button>
+                            onclick="_.getCtrl().update();">Actualizar</button>
                     <a href="#/centros-costo" class="boton">Volver al Listado</a>
                 </div>
             </div>
         </fieldset>
     </form>
-    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <div id="message" class="mensaje-sistema no-mostrar"></div>
 </div>

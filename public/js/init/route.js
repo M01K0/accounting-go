@@ -2,7 +2,7 @@
 'use strict';
 (function (window, _) {
     _.enrutar('vista')
-            .noEncontrado('404.html')
+            .notFound('404.html')
             .ruta('/', 'views/index.html')
             .ruta('/perfiles',
                     'views/perfiles/listar.html',

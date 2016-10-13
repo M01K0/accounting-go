@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/gorilla/context"
 	"net/http"
-	"log"
 )
 
 func IsPermitted(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
@@ -51,7 +50,7 @@ func MakeMiddleWarePermissions(path string, fn func(http.ResponseWriter, *http.R
 		if result {
 			fn(w, r, next)
 		} else {
-			DisplayError(w, errors.New("No estás autorizado"), "No estás autorizado para esta opción", http.StatusUnauthorized)
+			DisplayError(w, errors.New("No estás autorizado"), "No estás autorizado para esta opción", http.StatusForbidden)
 			return
 		}
 	}
