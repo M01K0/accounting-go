@@ -2,6 +2,8 @@ package common
 
 import (
 	"crypto/rsa"
+	"errors"
+	"github.com/alexyslozada/accounting-go/dao/executedao"
 	"github.com/alexyslozada/accounting-go/models"
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
@@ -9,10 +11,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 	"strings"
-	"errors"
-	"github.com/alexyslozada/accounting-go/dao/executedao"
+	"time"
 )
 
 // Archivos para firmar y verificar los token
@@ -59,9 +59,8 @@ func GenerateJWT(user models.User, method string) (string, error) {
 		return "", err
 	}
 
-
 	claims := models.AppClaims{
-		User: user,
+		User:   user,
 		Method: method,
 		Scopes: scopes,
 		StandardClaims: jwt.StandardClaims{

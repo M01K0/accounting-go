@@ -1,12 +1,12 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
 	"database/sql"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
 // PathProfileDAOPsql estructura dao de path_profile
-type PathProfileDAOPsql struct {}
+type PathProfileDAOPsql struct{}
 
 // Update actualiza un registro en la BD
 func (dao PathProfileDAOPsql) Update(o *models.PathProfile) error {

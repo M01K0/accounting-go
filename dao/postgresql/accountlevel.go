@@ -1,12 +1,12 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
-	"errors"
 	"database/sql"
+	"errors"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
-type AccountLevelDAOPsql struct {}
+type AccountLevelDAOPsql struct{}
 
 // Insert insertar registro en la BD
 func (dao AccountLevelDAOPsql) Insert(obj *models.AccountLevel) error {
@@ -57,7 +57,7 @@ func (dao AccountLevelDAOPsql) Delete(obj *models.AccountLevel) error {
 		return err
 	}
 	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
-			return errors.New("No se eliminó ningún registro")
+		return errors.New("No se eliminó ningún registro")
 	}
 	obj = new(models.AccountLevel)
 	return nil

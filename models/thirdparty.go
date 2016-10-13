@@ -21,6 +21,6 @@ type ThirdParty struct {
 	Email                string `json:"email"`
 	Department           `json:"department"`
 	City                 `json:"city"`
-	CreatedAt time.Time  `json:"createdAt"`
-	UpdatedAt time.Time  `json:"updatedAt"`
+	CreatedAt            time.Time `json:"createdAt"`
+	UpdatedAt            time.Time `json:"updatedAt"`
 }

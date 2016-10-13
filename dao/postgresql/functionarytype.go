@@ -1,12 +1,12 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
-	"errors"
 	"database/sql"
+	"errors"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
-type FunctionaryTypeDAOPsql struct {}
+type FunctionaryTypeDAOPsql struct{}
 
 // Insert insertar registro en la BD
 func (dao FunctionaryTypeDAOPsql) Insert(obj *models.FunctionaryType) error {
@@ -57,7 +57,7 @@ func (dao FunctionaryTypeDAOPsql) Delete(obj *models.FunctionaryType) error {
 		return err
 	}
 	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
-			return errors.New("No se eliminó ningún registro")
+		return errors.New("No se eliminó ningún registro")
 	}
 	obj = new(models.FunctionaryType)
 	return nil

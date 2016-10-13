@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"github.com/gorilla/mux"
 	"github.com/alexyslozada/accounting-go/controllers"
+	"github.com/gorilla/mux"
 )
 
 func SetLoginRoutes(router *mux.Router) {

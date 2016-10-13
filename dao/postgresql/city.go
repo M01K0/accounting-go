@@ -1,12 +1,12 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
-	"errors"
 	"database/sql"
+	"errors"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
-type CityDAOPsql struct {}
+type CityDAOPsql struct{}
 
 // Insert insertar registro en la BD
 func (dao CityDAOPsql) Insert(obj *models.City) error {
@@ -57,7 +57,7 @@ func (dao CityDAOPsql) Delete(obj *models.City) error {
 		return err
 	}
 	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
-			return errors.New("No se eliminó ningún registro")
+		return errors.New("No se eliminó ningún registro")
 	}
 	obj = new(models.City)
 	return nil

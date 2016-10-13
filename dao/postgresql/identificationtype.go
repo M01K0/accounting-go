@@ -1,9 +1,9 @@
 package postgresql
 
 import (
+	"database/sql"
 	"errors"
 	"github.com/alexyslozada/accounting-go/models"
-	"database/sql"
 )
 
 type IdentificationTypeDAOPsql struct{}

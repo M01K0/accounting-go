@@ -10,7 +10,7 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var (
-		data  LoginResource
+		data                                       LoginResource
 		tokenPost, tokenPut, tokenDelete, tokenGet string
 	)
 
@@ -54,11 +54,11 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	authUser := models.AuthUser{
-		User: user,
-		TokenPost: tokenPost,
-		TokenPut: tokenPut,
+		User:        user,
+		TokenPost:   tokenPost,
+		TokenPut:    tokenPut,
 		TokenDelete: tokenDelete,
-		TokenGet: tokenGet,
+		TokenGet:    tokenGet,
 	}
 
 	j, err := json.Marshal(AuthUserResource{authUser})

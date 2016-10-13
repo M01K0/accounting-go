@@ -1,13 +1,13 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
-	"errors"
 	"database/sql"
+	"errors"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
 // PathDAOPsql estructura dao de Path
-type PathDAOPsql struct {}
+type PathDAOPsql struct{}
 
 // Insert insertar
 func (dao PathDAOPsql) Insert(path *models.Path) error {

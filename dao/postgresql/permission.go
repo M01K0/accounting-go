@@ -6,7 +6,7 @@ import (
 )
 
 // PermissionDAOPsql consulta si el perfil tiene o no permisos
-type PermissionDAOPsql struct {}
+type PermissionDAOPsql struct{}
 
 func (dao PermissionDAOPsql) GetScopes(id int16, method string) ([]string, error) {
 	query := fmt.Sprintf(`

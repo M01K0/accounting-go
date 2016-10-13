@@ -1,10 +1,10 @@
 package routers
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/alexyslozada/accounting-go/controllers"
-	"github.com/urfave/negroni"
 	"github.com/alexyslozada/accounting-go/common"
+	"github.com/alexyslozada/accounting-go/controllers"
+	"github.com/gorilla/mux"
+	"github.com/urfave/negroni"
 )
 
 func SetCostCenterRoutes(router *mux.Router) {

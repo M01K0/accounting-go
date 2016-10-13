@@ -1,12 +1,12 @@
 package postgresql
 
 import (
-	"github.com/alexyslozada/accounting-go/models"
-	"errors"
 	"database/sql"
+	"errors"
+	"github.com/alexyslozada/accounting-go/models"
 )
 
-type BalanceSheetHeaderDAOPsql struct {}
+type BalanceSheetHeaderDAOPsql struct{}
 
 // Insert insertar registro en la BD
 func (dao BalanceSheetHeaderDAOPsql) Insert(obj *models.BalanceSheetHeader) error {
@@ -57,7 +57,7 @@ func (dao BalanceSheetHeaderDAOPsql) Delete(obj *models.BalanceSheetHeader) erro
 		return err
 	}
 	if rowsAffected, _ := result.RowsAffected(); rowsAffected == 0 {
-			return errors.New("No se eliminó ningún registro")
+		return errors.New("No se eliminó ningún registro")
 	}
 	obj = new(models.BalanceSheetHeader)
 	return nil

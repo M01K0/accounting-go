@@ -10,7 +10,7 @@ func IsPermitted(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) 
 	next(w, r)
 }
 
-func MakeMiddleWarePermissions(path string, fn func(http.ResponseWriter, *http.Request, http.HandlerFunc)) (func(http.ResponseWriter, *http.Request, http.HandlerFunc)) {
+func MakeMiddleWarePermissions(path string, fn func(http.ResponseWriter, *http.Request, http.HandlerFunc)) func(http.ResponseWriter, *http.Request, http.HandlerFunc) {
 	return func(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 		m, ok := context.GetOk(r, "methodrequest")

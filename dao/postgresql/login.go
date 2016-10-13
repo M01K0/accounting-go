@@ -2,7 +2,7 @@ package postgresql
 
 import "github.com/alexyslozada/accounting-go/models"
 
-type LoginDAOPsql struct {}
+type LoginDAOPsql struct{}
 
 func (l LoginDAOPsql) Login(u *models.User) error {
 	query := `SELECT users.id, identification, username, users.active, profile_id, profile, profiles.active

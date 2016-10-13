@@ -1,9 +1,9 @@
 package routers
 
 import (
-	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/urfave/negroni"
+	"net/http"
 )
 
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
