@@ -2,7 +2,7 @@
 'use strict';
 (function (window, _) {
     _.enrutar('vista')
-            .notFound('404.html')
+            .notFound('/404.html')
             .ruta('/', 'views/index.html')
             .ruta('/perfiles',
                     'views/perfiles/listar.html',
@@ -154,7 +154,7 @@
                   'views/centroscosto/crear.html',
                   'costCenter',
                   function(){
-                      _.getCtrl().inicio_crear();
+                      _.getCtrl().initCreate();
                   }
             )
             .ruta('/centros-costo/actualizar',

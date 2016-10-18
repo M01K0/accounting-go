@@ -1,5 +1,5 @@
 (function (window, JSON, _) {
-    var costCenterCtrl = {
+    let costCenterCtrl = {
         apiUrl: '/api/cost-centers/',
         viewUrl: '#/centros-costo',
         page: 1,
@@ -25,25 +25,28 @@
         getByID: function(id, callback){
             let self = this,
                 request = {
-                method: 'GET',
-                url: self.apiUrl + id,
-                callback: callback
-            };
+                    method: 'GET',
+                    url: self.apiUrl + id,
+                    callback: callback
+                };
             _.execute(request);
         },
         fillData: function (response) {
+            let self = _.getCtrl(),
+                data = JSON.parse(response.content).data,
+                msgDiv = self.messageDiv.delClass('mo-mostrar');
+
             switch (response.status) {
             case _.STATUS_OK:
-                data = JSON.parse(response.content);
-                _.getID('id').setValue(data.data.id);
-                _.getID('code').setValue(data.data.code);
-                _.getID('costCenter').setValue(data.data.costCenter);
+                _.getID('id').setValue(data.id);
+                _.getID('code').setValue(data.code);
+                _.getID('costCenter').setValue(data.costCenter);
                 break;
             case _.STATUS_FORBIDDEN:
-                self.messageDiv.text(data.data.message);
+                msgDiv.text(data.message);
                 break;
             default:
-                self.messageDiv.text("Código de respuesta no esperado: "+data.status);
+                msgDiv.text('Status no esperado: ' + response.status + ' ' + data.error + ' ' + data.message);
             }
         },
         confirmUpdate: function (id) {
@@ -58,29 +61,29 @@
 
             data.id = parseInt(data.id, 10);
             body = {data};
-            _.ajax({
+            _.execute({
                 method: 'PUT',
                 url: self.apiUrl + data.id,
-                body: JSON.stringify(body)
-            }).then(function (response) {
-                        self.updated(response);
-                    },
-                    function (error) {
-                        console.log(error);
-                    }
-            );
+                body: JSON.stringify(body),
+                callback: self.updated
+            });
         },
         updated: function (response) {
             let self = _.getCtrl(),
-                data = JSON.parse(response.content);
+                msgDiv = self.messageDiv.delClass('no-mostrar'),
+                data = JSON.parse(response.content).data;
+
             switch (response.status) {
             case _.STATUS_OK:
-                self.messageDiv.delClass('no-mostrar').text("Actualizado Correctamente");
+                msgDiv.text("Actualizado Correctamente");
                 break;
             case _.STATUS_FORBIDDEN:
-                self.messageDiv.delClass('no-mostrar').text("No está autorizado para realizar esta acción");
+                msgDiv.text("No está autorizado para realizar esta acción");
                 break;
+            default:
+                msgDiv.text('Status no esperado: ' + response.status + ' ' + data.error + ' ' + data.message);
             }
+
             self.form.reset();
             setTimeout(function () {
                 window.location.hash = self.viewUrl;
@@ -88,57 +91,63 @@
         },
         create: function () {
             let self = this,
-                data = new FormData(this.form);
-            _.ajax({
-                method: 'POST',
-                url: self.apiUrl,
-                body: data
-            }).then(function (data) {
-                        self.created(data);
-                    },
-                    function (error) {
-                        console.log(error);
-                    }
-            );
+                data = _.serializeJSON(self.form),
+                body = {data};
+            _.execute({
+              method: 'POST',
+              url: self.apiUrl,
+              body: JSON.stringify(body),
+              callback: self.created
+            });
         },
         created: function (response) {
-            let self = this,
-                data = JSON.parse(response);
+            let self = _.getCtrl(),
+                msgDiv = self.messageDiv.delClass('no-mostrar'),
+                data = JSON.parse(response.content).data;
 
-            self.messageDiv.delClass('no-mostrar').text(data.mensaje);
-            if (data.tipo === _.MSG_CORRECTO) {
+            switch (response.status) {
+            case _.STATUS_CREATED:
+                msgDiv.text('Centro de costo creado con el id: ' + data.id);
                 self.form.reset();
-            } else if (data.tipo === _.MSG_NO_AUTENTICADO) {
-                window.location.href = '/';
+                break;
+            case _.STATUS_FORBIDDEN:
+                msgDiv.text('No estás autorizado para esta acción');
+                break;
+            default:
+                msgDiv.text('Status no esperado: ' + response.status + ' ' + data.error + ' ' + data.message);
             }
         },
         confirmDelete: function (id) {
+            let self = this;
             if (confirm('Desea eliminar este centro?')) {
-                erase(id);
+                self.delete(id);
             }
         },
-        erase: function (id) {
+        delete: function (id) {
             let self = this;
-
-            _.ajax({
+            _.execute({
                 method: 'DELETE',
-                url: self.apiUrl + id
-            }).then(function (data) {
-                        self.erased(data);
-                    }, function (error) {
-                        console.log(error);
-                    }
-            );
+                url: self.apiUrl + id,
+                callback: self.deleted
+            });
         },
-        erased: function (response) {
-            let self = this,
-                data = JSON.parse(response);
+        deleted: function (response) {
+            console.log(response.content);
+            let self = _.getCtrl(),
+                data = {},
+                messageDiv = self.messageDiv.delClass('no-mostrar');
 
-            self.messageDiv.delClass('no-mostrar').text(data.mensaje);
-            if (data.tipo === _.MSG_CORRECTO) {
+            switch (response.status) {
+            case _.STATUS_NOCONTENT:
+                messageDiv.text('Eliminado correctamente');
                 self.list(self.loadTable);
-            } else if (data.tipo === _.MSG_NO_AUTENTICADO) {
-                window.location.href = '/';
+                break;
+            case _.STATUS_FORBIDDEN:
+                messageDiv.text('No estás autorizado para realizar esta acción');
+                break;
+            default:
+                data = JSON.parse(response.content).data;
+                msgDiv.text('Status no esperado: ' + response.status + ' ' + data.error + ' ' + data.message);
             }
         },
         list: function (callback) {
@@ -156,40 +165,43 @@
         },
         loadTable: function (response) {
             let self = _.getCtrl(),
-                data = {},
+                msgDiv = self.messageDiv,
+                data = JSON.parse(response.content).data,
                 campos = [],
                 columns = [],
                 actions = {};
 
-            if (response.status === 200) {
-                data = JSON.parse(response.content);
-                campos = ['id', 'code', 'costCenter'];
+            switch (response.status) {
+            case _.STATUS_OK:
+                fields = ['id', 'code', 'costCenter'];
                 columns = ['id', 'codigo', 'nombre'];
                 actions = {
-                    eliminar: {
-                        clase: '.eliminar',
-                        funcion: function (e) {
+                    delete: {
+                        class: '.eliminar',
+                        callback: function (e) {
                                     e.preventDefault();
                                     self.confirmDelete(e.target.dataset.id);
                         }
                     },
-                    actualizar: {
-                        clase: '.actualizar',
-                        funcion: function (e) {
+                    update: {
+                        class: '.actualizar',
+                        callback: function (e) {
                                     e.preventDefault();
                                     self.confirmUpdate(e.target.dataset.id);
                         }
                     }
                 };
 
-                self.totalPages = Math.ceil(data.data.length / self.limit);
+                self.totalPages = Math.ceil(data.length / self.limit);
                 _.getID('page').get().setAttribute('max', self.totalPages);
                 _.getID('totalPages').text('de ' + self.totalPages);
-                _.fillRows('cuerpoTabla', 'plantilla', data.data, campos, columns, actions);
-            } else if (data.tipo === _.MSG_ADVERTENCIA || data.tipo === _.MSG_ERROR) {
-                self.messageDiv.delClass('no-mostrar').text(data.mensaje);
-            } else if (data.tipo === _.MSG_NO_AUTENTICADO) {
-                window.location.href = '/';
+                _.fillRows('cuerpoTabla', 'plantilla', data, fields, columns, actions);
+                break;
+            case _.STATUS_FORBIDDEN:
+                msgDiv.delClass('no-mostrar').text('No estás autorizado para listar este contenido');
+                break;
+            default:
+                msgDiv.delClass('no-mostrar').text('Status no esperado: ' + response.status + ' ' + data.error + ' ' + data.message);
             }
         },
         paginate: function () {

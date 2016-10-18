@@ -4,21 +4,21 @@
             <legend>Centro de Costo</legend>
             <div class="contenedor">
                 <div class="item tablet-50">
-                    <label for="codigo" class="label-titulo">Código</label>
-                    <input id="codigo" name="codigo" required type="text" maxlength="3" placeholder="codigo" autocomplete="off">
+                    <label for="code" class="label-titulo">Código</label>
+                    <input id="code" name="code" required type="text" maxlength="3" placeholder="codigo" autocomplete="off">
                 </div>
                 <div class="item tablet-50">
-                    <label for="nombre" class="label-titulo">Nombre</label>
-                    <input id="nombre" name="nombre" required type="text" maxlength="30" placeholder="nombre" autocomplete="off">
+                    <label for="costCenter" class="label-titulo">Nombre</label>
+                    <input id="costCenter" name="costCenter" required type="text" maxlength="30" placeholder="nombre" autocomplete="off">
                 </div>
                 <div class="item">
                     <button id="btnCrear"
                             class="boton primario"
-                            onclick="_.getCtrl().crear();">Crear</button>
+                            onclick="_.getCtrl().create();">Crear</button>
                     <a href="#/centros-costo" class="boton">Volver al Listado</a>
                 </div>
             </div>
         </fieldset>
     </form>
-    <div id="mensaje" class="mensaje-sistema no-mostrar"></div>
+    <div id="message" class="mensaje-sistema no-mostrar"></div>
 </div>

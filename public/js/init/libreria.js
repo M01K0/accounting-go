@@ -9,6 +9,8 @@
             singleton = {},
             libreria = {
                 STATUS_OK: 200,
+                STATUS_CREATED: 201,
+                STATUS_NOCONTENT: 204,
                 STATUS_UNAUTHORIZED: 401,
                 STATUS_FORBIDDEN: 403,
                 STATUS_INTERNALSERVERERROR: 500,
@@ -166,9 +168,9 @@
                          * {'nombre': {'clase', 'funcion'}}
                          */
                         for (action in actions) {
-                            btnAction = clon.querySelector(actions[action].clase);
+                            btnAction = clon.querySelector(actions[action].class);
                             btnAction.dataset.id = registry[fields[0]];
-                            btnAction.addEventListener('click', actions[action].funcion, false);
+                            btnAction.addEventListener('click', actions[action].callback, false);
                         }
 
                         fragment.appendChild(clon);
