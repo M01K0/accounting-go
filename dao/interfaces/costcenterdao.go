@@ -8,4 +8,5 @@ type CostCenterDAO interface {
 	Delete(id int16) error
 	GetByID(id int16) (*models.CostCenter, error)
 	GetAll() ([]models.CostCenter, error)
+	GetAllPagination(p int, l int, o int, t string) ([]models.CostCenter, error)
 }

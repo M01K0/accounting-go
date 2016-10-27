@@ -1,8 +1,9 @@
 package postgresql
 
 import (
-	"database/sql"
+	"fmt"
 	"errors"
+	"database/sql"
 	"github.com/alexyslozada/accounting-go/models"
 )
 
@@ -109,6 +110,41 @@ func (dao CostCenterDAOPsql) GetAll() ([]models.CostCenter, error) {
 	}
 	return objs, nil
 }
+
+func (dao CostCenterDAOPsql) GetAllPagination(page int, limit int, orderBy int, orderType string) ([]models.CostCenter, error) {
+	offset := limit * page - limit
+	query := fmt.Sprintf(`SELECT id, code, cost_center, created_at, updated_at
+							FROM cost_centers
+							ORDER BY %d %s
+							LIMIT $1
+							OFFSET $2`, orderBy, ValidateStringSQL(orderType))
+	objs := make([]models.CostCenter, 0)
+	db := get()
+	defer db.Close()
+
+	stmt, err := db.Prepare(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var o models.CostCenter
+		err = rows.Scan(&o.ID, &o.Code, &o.CostCenter, &o.CreatedAt, &o.UpdatedAt)
+		if err != nil {
+			return objs, err
+		}
+		objs = append(objs, o)
+	}
+	return objs, nil
+}
+
 
 func (dao CostCenterDAOPsql) rowToObject(row *sql.Row, o *models.CostCenter) error {
 	return row.Scan(&o.ID, &o.Code, &o.CostCenter, &o.CreatedAt, &o.UpdatedAt)

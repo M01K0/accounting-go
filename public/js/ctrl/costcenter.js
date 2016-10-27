@@ -6,7 +6,7 @@
         totalPages: 0,
         limit: 10,
         orderBy: 2,
-        orderType: 'acs',
+        orderType: 'asc',
         queryType: 1,
         form: null,
         messageDiv: null,
@@ -152,16 +152,13 @@
         },
         list: function (callback) {
             let self = this,
-                body = _.pagination(this.page, this.limit, this.orderBy, this.orderType);
-            _.ajax({
-                method: 'GET',
-                url: self.apiUrl,
-                body: body
-            }).then(function (data) {
-                        callback(data);
-                    }, function (error) {
-                        console.log(error);
-                    });
+                body = _.pagination(this.page, this.limit, this.orderBy, this.orderType),
+                request = {
+                    method: 'GET',
+                    url: self.apiUrl + body,
+                    callback: callback
+                };
+            _.execute(request);
         },
         loadTable: function (response) {
             let self = _.getCtrl(),

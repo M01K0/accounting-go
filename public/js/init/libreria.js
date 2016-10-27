@@ -85,43 +85,6 @@
                     }, false);
                     return this;
                 },
-                llenarFilas: function (cuerpoTabla, template, datos, campos, acciones) {
-                    var cuerpo = document.getElementById(cuerpoTabla),
-                            fila = document.getElementById(template),
-                            frag = document.createDocumentFragment(),
-                            i = 0, j = 0, maxDatos = datos.length, registro = {},
-                            clon = null, maxCampos = campos.length, campo = null,
-                            accion = null, btnAccion = null;
-
-                    cuerpo.textContent = '';
-                    for (; i < maxDatos; i = i + 1) {
-                        registro = datos[i];
-                        clon = fila.content.cloneNode(true);
-                        for (; j < maxCampos; j = j + 1) {
-                            campo = clon.querySelector('.' + campos[j]);
-                            if (typeof registro[campos[j]] !== 'boolean') {
-                                campo.textContent = registro[campos[j]];
-                            } else {
-                                campo.textContent = registro[campos[j]] ? 'Si' : 'No';
-                            }
-                        }
-                        j = 0;
-
-                        /**
-                         * Accines a realizar
-                         * El objeto debe tener la siguiente estructura
-                         * {'nombre': {'clase', 'funcion'}}
-                         */
-                        for (accion in acciones) {
-                            btnAccion = clon.querySelector(acciones[accion].clase);
-                            btnAccion.dataset.idu = registro['id'];
-                            btnAccion.addEventListener('click', acciones[accion].funcion, false);
-                        }
-
-                        frag.appendChild(clon);
-                    }
-                    cuerpo.appendChild(frag);
-                },
                 // Función que permite llenar una tabla
                 // Se le debe enviar el id del tbody
                 // el id del template
@@ -179,8 +142,8 @@
                 },
                 paginate: function (ctrl) {
                     let input = this.getID('page'),
-                        page = parseInt(input.value(), 10),
-                        limit = parseInt(this.getID('limit').value(), 10);
+                        page = parseInt(input.getValue(), 10),
+                        limit = parseInt(this.getID('limit').getValue(), 10);
                     if (page <= ctrl.totalPages) {
                         if (page > 0) {
                             ctrl.page = page;
@@ -197,8 +160,8 @@
                         ctrl.limit = 1;
                         this.getID('limit').setValue(1);
                     }
-                    ctrl.orderBy = parseInt(this.getID('orderBy').value(), 10);
-                    ctrl.orderType = this.getID('orderType').value();
+                    ctrl.orderBy = parseInt(this.getID('orderBy').getValue(), 10);
+                    ctrl.orderType = this.getID('orderType').getValue();
                 },
                 movePaginate: function (ctrl, action) {
                     let page = this.getID('page');
@@ -217,11 +180,7 @@
                     }
                 },
                 pagination: function (page, limit, orderBy, orderType) {
-                    var data = new FormData();
-                    data.append("page", page);
-                    data.append("limit", limit);
-                    data.append("orderBy", orderBy);
-                    data.append("orderType", orderType);
+                    var data = `?pagination=true&page=${page}&limit=${limit}&orderby=${orderBy}&ordertype=${orderType}`;
                     return data;
                 },
                 /**
@@ -347,6 +306,11 @@
                             // Unauthorized status
                             if (this.status === _.STATUS_UNAUTHORIZED) {
                                 alert('No estás autenticado. Por favor ingresa nuevamente.');
+                                sessionStorage.removeItem('tokenDELETE');
+                                sessionStorage.removeItem('tokenGET');
+                                sessionStorage.removeItem('tokenPOST');
+                                sessionStorage.removeItem('tokenPUT');
+                                sessionStorage.removeItem('user');
                                 window.location.href = '/';
                                 return;
                             }
